@@ -32,6 +32,11 @@ const ProgramSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    type: {
+      type: String,
+      enum: ["university", "internship", "webinar"],
+      required: true,
+    },
   },
   { timestamps: true }
 );
