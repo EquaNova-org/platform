@@ -33,21 +33,37 @@
 
   <!-- JavaScript to fetch and display program(s) -->
   <script>
-    const API_URL = "https://platform-5yxz.onrender.com/api/programs"; // relative URL works with backend
+  const BASE_URL = "https://platform-5yxz.onrender.com/";
+  const API_URL = `${BASE_URL}/api/programs`;
 
-    async function loadProgram() {
-      const container = document.getElementById("programs");
+  const params = new URLSearchParams(window.location.search);
+  const type = params.get("type"); // university | internship | webinar
 
-      try {
-        const response = await fetch(API_URL);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+  async function loadPrograms() {
+    const container = document.getElementById("programs");
+    container.innerHTML = "<p>Loading programs...</p>";
 
-        const program = await response.json();
-        // If backend returns array, take first item
-        const data = Array.isArray(program) ? program[0] : program;
+    try {
+      const response = await fetch(API_URL);
+      if (!response.ok) {
+        throw new Error("Failed to fetch programs");
+      }
 
+      let programs = await response.json();
+
+      // Filter by type if provided
+      if (type) {
+        programs = programs.filter(p => p.type === type);
+      }
+
+      container.innerHTML = "";
+
+      if (programs.length === 0) {
+        container.innerHTML = "<p>No programs found.</p>";
+        return;
+      }
+
+      programs.forEach(data => {
         const card = document.createElement("div");
         card.className = "program-card";
 
@@ -65,17 +81,16 @@
         `;
 
         container.appendChild(card);
+      });
 
-      } catch (error) {
-        console.error(error);
-        container.innerHTML = `<p style="color:red">Failed to load program: ${error.message}</p>`;
-      }
+    } catch (error) {
+      console.error(error);
+      container.innerHTML = "<p style='color:red'>Failed to load programs.</p>";
     }
+  }
 
-    loadProgram();
-  </script>
+  loadPrograms();
+</script>
 
 </body>
 </html>
-
-
