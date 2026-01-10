@@ -11,6 +11,7 @@ const program = {
   field: "Computer Science",
   website: "https://careers.google.com",
   verified: true,
+  type: "internship",
   _id: "695f5434f04e0b0122473d47",
   createdAt: "2026-01-08T06:52:36.696Z",
   updatedAt: "2026-01-08T06:52:36.696Z",
