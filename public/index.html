@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EquaNova - Student Travel & Internships</title>
+    <meta name="description" content="Verified international internships, university programs, and global events for students under 25.">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,10 +17,11 @@
         <ul class="nav-links">
             <li><a href="#home">Home</a></li>
             <li><a href="#explore">Explore</a></li>
+            <li><a href="programs.html">Programs</a></li>
             <li><a href="#features">Features</a></li>
         </ul>
 
-        <!-- Login/Sign Up buttons on top-right -->
+        <!-- Login/Sign Up buttons -->
         <div class="auth-buttons">
             <a href="login.html" class="btn primary-btn">Log In</a>
             <a href="signup.html" class="btn secondary-btn">Sign Up</a>
@@ -38,12 +40,14 @@
 
         <div class="hero-buttons">
             <a href="#explore" class="btn primary-btn">Get Started</a>
-            <a href="#features" class="btn secondary-btn">Discover More</a>
+            <a href="programs.html" class="btn secondary-btn">Browse Programs</a>
         </div>
 
-        <img src="hero-placeholder.jpg"
-             alt="EquaNova international students"
-             class="hero-image">
+        <img
+            src="hero-placeholder.jpg"
+            alt="International students exploring global opportunities"
+            class="hero-image"
+        >
     </section>
 
     <!-- Why EquaNova Section -->
@@ -64,26 +68,27 @@
         </p>
         <p><strong>Contact:</strong> +998 93 092 09 22</p>
     </section>
-    
-         <!-- Programs Section -->
-<section class="programs-section">
-      <h2>Available Programs</h2>
-      <p>Verified opportunities directly from our partners.</p>
-
-      <div id="programs"></div>
-</section>
 
     <!-- Explore Events Section -->
     <section id="explore" class="explore">
         <h2>Explore Events</h2>
+
         <div class="cards">
-            <div class="card">Global Internships</div>
-            <div class="card">University Programs</div>
-            <div class="card">Webinars & Summits</div>
+            <a href="programs.html?type=university" aria-label="University programs">
+                <div class="card">University Programs</div>
+            </a>
+
+            <a href="programs.html?type=internship" aria-label="Internships">
+                <div class="card">Global Internships</div>
+            </a>
+
+            <a href="programs.html?type=webinar" aria-label="Webinars and summits">
+                <div class="card">Webinars & Summits</div>
+            </a>
         </div>
     </section>
 
-    <!-- Feature Sections with Card Layout -->
+    <!-- Features Section -->
     <section id="features" class="features">
         <h2>Our Services & Community</h2>
 
@@ -91,9 +96,9 @@
             <div class="feature-card">
                 <h3>Nova Mode</h3>
                 <p>
-                    With this <strong>premium subscription</strong>, gain an extra <strong>peace of mind</strong>.
-                    We handle everything — from <strong>transportation</strong> to <strong>accommodation</strong> —
-                    and even provide a <strong>personal bodyguard</strong>.
+                    With this <strong>premium subscription</strong>, gain extra peace of mind.
+                    We handle everything — from transportation to accommodation —
+                    and even provide a personal bodyguard.
                 </p>
             </div>
 
@@ -107,56 +112,22 @@
             <div class="feature-card">
                 <h3>Culture & Community</h3>
                 <p>
-                    Explore the EquaNova social community. Bookings are limited to 999 members.
+                    Explore the EquaNova social community.
+                    Bookings are limited to 999 members.
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- JavaScript to display single program -->
-    <script>
-  const API_URL = "http://localhost:5000/api/programs";
-
-  async function loadProgram() {
-    try {
-      const response = await fetch(API_URL);
-      if (!response.ok) {
-        throw new Error("Failed to fetch program");
-      }
-
-      const program = await response.json();
-
-      const container = document.getElementById("programs");
-
-      const card = document.createElement("div");
-      card.className = "program-card";
-
-      card.innerHTML = `
-        <h3>${program.name}</h3>
-        <p><strong>Provider:</strong> ${program.provider}</p>
-        <p><strong>Level:</strong> ${program.level}</p>
-        <p><strong>Field:</strong> ${program.field}</p>
-        <p><strong>Country:</strong> ${program.country}</p>
+    <!-- Call To Action -->
+    <section class="why-equanova">
+        <h2>Ready to Start Your Journey?</h2>
         <p>
-          <strong>Website:</strong>
-          <a href="${program.website}" target="_blank">${program.website}</a>
+            Discover verified international opportunities and take your first step
+            toward a global future.
         </p>
-        <p><strong>Verified:</strong> ${program.verified ? "✅ Yes" : "❌ No"}</p>
-      `;
-
-      container.appendChild(card);
-
-    } catch (error) {
-      console.error(error);
-      document.getElementById("programs").innerHTML =
-        "<p>Failed to load program.</p>";
-    }
-  }
-
-  loadProgram();
-</script>
-
+        <a href="programs.html" class="btn primary-btn">Explore Programs</a>
+    </section>
 
 </body>
 </html>
-
