@@ -1,21 +1,24 @@
-const Program = require("../models/Program");
+const Program = require("../models/program");
 
-// GET all programs
-exports.getPrograms = async (req, res) => {
+// Controller for GET
+const getPrograms = async (req, res) => {
   try {
-    const programs = await Program.find();
+    const programs = await Program.find(); // fetch all
     res.json(programs);
-  } catch (error) {
-    res.status(500).json({ message: "Failed to fetch programs" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
-// CREATE a new program
-exports.createProgram = async (req, res) => {
+// Controller for POST
+const createProgram = async (req, res) => {
   try {
-    const program = await Program.create(req.body);
+    const program = new Program(req.body); // make sure your model matches the body
+    await program.save();
     res.status(201).json(program);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 };
+
+module.exports = { getPrograms, createProgram };
