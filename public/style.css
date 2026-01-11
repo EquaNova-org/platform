@@ -175,6 +175,13 @@ p {
     margin-top: 40px;
 }
 
+.cards a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+
 .card {
     background: #ffffff;
     padding: 30px;
