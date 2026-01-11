@@ -11,10 +11,12 @@
   <!-- Navigation -->
   <nav>
     <div class="logo">EquaNova</div>
+
     <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="programs.html">Programs</a></li>
+      <li><a href="/">Home</a></li>
+      <li><a href="/programs">Programs</a></li>
     </ul>
+
     <div class="auth-buttons">
       <a href="login.html" class="btn primary-btn">Log In</a>
       <a href="signup.html" class="btn secondary-btn">Sign Up</a>
@@ -25,57 +27,62 @@
   <section class="programs-section">
     <h2>Available Programs</h2>
     <p>Verified opportunities directly from our partners.</p>
-    <div id="programs">
-      <p id="status-text">⏳ Waking up server… please wait.</p>
-    </div>
+
+    <div id="programs"></div>
   </section>
 
-  <!-- JavaScript to fetch and display programs -->
+  <!-- JavaScript to fetch and display program(s) -->
   <script>
-    const BASE_URL = "YOUR_RENDER_URL_HERE"; // Replace with your Render backend URL
-    const API_URL = BASE_URL + "/api/programs";
+  const BASE_URL = "https://platform-5yxz.onrender.com";
+  const API_URL = `${BASE_URL}/api/programs`;
+
+  async function loadPrograms() {
     const container = document.getElementById("programs");
-    const statusText = document.getElementById("status-text");
 
-    async function fetchPrograms(retries = 5, delay = 4000) {
-      try {
-        const response = await fetch(API_URL);
-        if (!response.ok) throw new Error("Server not ready yet");
-
-        const program = await response.json();
-        renderProgram(program);
-      } catch (err) {
-        if (retries > 0) {
-          statusText.textContent = "⏳ Waking up server… retrying, please wait.";
-          setTimeout(() => fetchPrograms(retries - 1, delay), delay);
-        } else {
-          statusText.textContent = "⚠️ Server is taking longer than usual. Please refresh the page.";
-        }
+    try {
+      const response = await fetch(API_URL);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
       }
-    }
 
-    function renderProgram(program) {
-      container.innerHTML = ""; // clear status/loading text
-      const card = document.createElement("div");
-      card.className = "program-card";
-      card.innerHTML = `
-        <h3>${program.name}</h3>
-        <p><strong>Provider:</strong> ${program.provider}</p>
-        <p><strong>Level:</strong> ${program.level}</p>
-        <p><strong>Field:</strong> ${program.field}</p>
-        <p><strong>Country:</strong> ${program.country}</p>
-        <p>
-          <strong>Website:</strong>
-          <a href="${program.website}" target="_blank">${program.website}</a>
-        </p>
-        <p><strong>Verified:</strong> ${program.verified ? "✅ Yes" : "❌ No"}</p>
-      `;
-      container.appendChild(card);
-    }
+      const programs = await response.json();
 
-    // Initial fetch
-    fetchPrograms();
-  </script>
+      const params = new URLSearchParams(window.location.search);
+      const type = params.get("type");
+
+      const filtered = type
+        ? programs.filter(p => p.type === type)
+        : programs;
+
+      if (filtered.length === 0) {
+        container.innerHTML = "<p>No programs found.</p>";
+        return;
+      }
+
+      filtered.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "program-card";
+        card.innerHTML = `
+          <h3>${p.name}</h3>
+          <p><strong>Provider:</strong> ${p.provider}</p>
+          <p><strong>Level:</strong> ${p.level}</p>
+          <p><strong>Field:</strong> ${p.field}</p>
+          <p><strong>Country:</strong> ${p.country}</p>
+          <p><strong>Verified:</strong> ${p.verified ? "✅ Yes" : "❌ No"}</p>
+          <a href="${p.website}" target="_blank">Official website</a>
+        `;
+        container.appendChild(card);
+      });
+
+    } catch (err) {
+      console.error(err);
+      container.innerHTML =
+        `<p style="color:red">Failed to load programs</p>`;
+    }
+  }
+
+  loadPrograms();
+</script>
 
 </body>
 </html>
