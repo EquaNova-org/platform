@@ -1,9 +1,7 @@
-// src/routes/programRoutes.js
 const express = require("express");
 const router = express.Router();
 
-// Dummy single program
-const program = {
+let program = {
   name: "Google STEP Internship",
   provider: "Google",
   level: "Undergraduate",
@@ -12,15 +10,20 @@ const program = {
   website: "https://careers.google.com",
   verified: true,
   type: "internship",
-  _id: "695f5434f04e0b0122473d47",
-  createdAt: "2026-01-08T06:52:36.696Z",
-  updatedAt: "2026-01-08T06:52:36.696Z",
-  __v: 0
 };
 
-// GET /api/programs
+// GET program
 router.get("/", (req, res) => {
   res.json(program);
+});
+
+// POST program (Thunder Client)
+router.post("/", (req, res) => {
+  program = req.body;
+  res.status(201).json({
+    message: "Program updated successfully",
+    program,
+  });
 });
 
 module.exports = router;
