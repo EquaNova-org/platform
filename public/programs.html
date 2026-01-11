@@ -32,38 +32,40 @@
   </section>
 
   <!-- JavaScript to fetch and display program(s) -->
-  <script>
-  const BASE_URL = "https://platform-5yxz.onrender.com/";
+  <<script>
+  const BASE_URL =
+    location.hostname === "localhost"
+      ? "http://localhost:5000"
+      : "https://platform-5yxz.onrender.com/";
+
   const API_URL = `${BASE_URL}/api/programs`;
 
+  // Get ?type= from URL
   const params = new URLSearchParams(window.location.search);
-  const type = params.get("type"); // university | internship | webinar
+  const selectedType = params.get("type");
 
   async function loadPrograms() {
     const container = document.getElementById("programs");
-    container.innerHTML = "<p>Loading programs...</p>";
+    container.innerHTML = "";
 
     try {
       const response = await fetch(API_URL);
-      if (!response.ok) {
-        throw new Error("Failed to fetch programs");
-      }
+      if (!response.ok) throw new Error("Failed to fetch");
 
-      let programs = await response.json();
+      const programs = await response.json();
 
       // Filter by type if provided
-      if (type) {
-        programs = programs.filter(p => p.type === type);
-      }
+      const filtered = selectedType
+        ? programs.filter(p => p.type === selectedType)
+        : programs;
 
-      container.innerHTML = "";
-
-      if (programs.length === 0) {
-        container.innerHTML = "<p>No programs found.</p>";
+      if (filtered.length === 0) {
+        container.innerHTML =
+          "<p>No programs found for this category.</p>";
         return;
       }
 
-      programs.forEach(data => {
+      filtered.forEach(data => {
         const card = document.createElement("div");
         card.className = "program-card";
 
@@ -83,9 +85,10 @@
         container.appendChild(card);
       });
 
-    } catch (error) {
-      console.error(error);
-      container.innerHTML = "<p style='color:red'>Failed to load programs.</p>";
+    } catch (err) {
+      console.error(err);
+      container.innerHTML =
+        "<p style='color:red'>Failed to load programs.</p>";
     }
   }
 
