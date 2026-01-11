@@ -32,63 +32,52 @@
   </section>
 
   <!-- JavaScript to fetch and display program(s) -->
-  <<script>
-  const BASE_URL =
-    location.hostname === "localhost"
-      ? "http://localhost:5000"
-      : "https://platform-5yxz.onrender.com/";
-
+  <script>
+  const BASE_URL = "https://platform-5yxz.onrender.com/";
   const API_URL = `${BASE_URL}/api/programs`;
-
-  // Get ?type= from URL
-  const params = new URLSearchParams(window.location.search);
-  const selectedType = params.get("type");
 
   async function loadPrograms() {
     const container = document.getElementById("programs");
-    container.innerHTML = "";
 
     try {
       const response = await fetch(API_URL);
-      if (!response.ok) throw new Error("Failed to fetch");
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
 
       const programs = await response.json();
 
-      // Filter by type if provided
-      const filtered = selectedType
-        ? programs.filter(p => p.type === selectedType)
+      const params = new URLSearchParams(window.location.search);
+      const type = params.get("type");
+
+      const filtered = type
+        ? programs.filter(p => p.type === type)
         : programs;
 
       if (filtered.length === 0) {
-        container.innerHTML =
-          "<p>No programs found for this category.</p>";
+        container.innerHTML = "<p>No programs found.</p>";
         return;
       }
 
-      filtered.forEach(data => {
+      filtered.forEach(p => {
         const card = document.createElement("div");
         card.className = "program-card";
-
         card.innerHTML = `
-          <h3>${data.name}</h3>
-          <p><strong>Provider:</strong> ${data.provider}</p>
-          <p><strong>Level:</strong> ${data.level}</p>
-          <p><strong>Field:</strong> ${data.field}</p>
-          <p><strong>Country:</strong> ${data.country}</p>
-          <p>
-            <strong>Website:</strong>
-            <a href="${data.website}" target="_blank">${data.website}</a>
-          </p>
-          <p><strong>Verified:</strong> ${data.verified ? "✅ Yes" : "❌ No"}</p>
+          <h3>${p.name}</h3>
+          <p><strong>Provider:</strong> ${p.provider}</p>
+          <p><strong>Level:</strong> ${p.level}</p>
+          <p><strong>Field:</strong> ${p.field}</p>
+          <p><strong>Country:</strong> ${p.country}</p>
+          <p><strong>Verified:</strong> ${p.verified ? "✅ Yes" : "❌ No"}</p>
+          <a href="${p.website}" target="_blank">Official website</a>
         `;
-
         container.appendChild(card);
       });
 
     } catch (err) {
       console.error(err);
       container.innerHTML =
-        "<p style='color:red'>Failed to load programs.</p>";
+        `<p style="color:red">Failed to load programs</p>`;
     }
   }
 
