@@ -14,29 +14,22 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve static frontend
-app.use(express.static(path.join(__dirname, "public")));
-
-// Routes for pages
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-
-app.get("/programs", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "programs.html"));
-});
-
-
 /* =====================
    Database
 ===================== */
 connectDB();
 
 /* =====================
-   Serve Frontend
+   API Routes
+===================== */
+app.use("/api/programs", programRoutes);
+
+/* =====================
+   Serve Frontend (Static)
 ===================== */
 app.use(express.static(path.join(__dirname, "public")));
 
+// Pages
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
@@ -44,11 +37,6 @@ app.get("/", (req, res) => {
 app.get("/programs", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "programs.html"));
 });
-
-/* =====================
-   API Routes
-===================== */
-app.use("/api/programs", programRoutes);
 
 /* =====================
    Server
