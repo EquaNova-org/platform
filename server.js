@@ -35,7 +35,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/programs", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "events.html"));
+  res.sendFile(path.join(__dirname, "public", "programs.html"));
 });
 
 /* =====================
@@ -45,4 +45,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
+
 
