@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 
-// Programs array (even if only one for now)
+// Multiple dummy programs (temporary database)
 const programs = [
   {
     name: "Google STEP Internship",
@@ -12,7 +12,27 @@ const programs = [
     field: "Computer Science",
     website: "https://careers.google.com",
     verified: true,
-    type: "internship",
+    type: "internship"
+  },
+  {
+    name: "Erasmus+ Exchange Program",
+    provider: "European Union",
+    level: "Undergraduate",
+    country: "Multiple (EU)",
+    field: "All Fields",
+    website: "https://erasmus-plus.ec.europa.eu",
+    verified: true,
+    type: "university"
+  },
+  {
+    name: "UN Youth Leadership Webinar",
+    provider: "United Nations",
+    level: "All Levels",
+    country: "Online",
+    field: "Leadership",
+    website: "https://www.un.org/youthenvoy",
+    verified: true,
+    type: "webinar"
   }
 ];
 
