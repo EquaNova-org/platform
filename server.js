@@ -58,4 +58,12 @@ app.get("/health", (req, res) => {
    API Routes
 ===================== */
 app.use("/api/programs", programRoutes);
-app.use("/api", bookingRoutes)
+app.use("/api", bookingRoutes);
+/* =====================
+   START SERVER
+===================== */
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
