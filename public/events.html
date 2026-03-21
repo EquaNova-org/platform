@@ -25,16 +25,21 @@
 
   <!-- Events Section -->
   <section class="events-section">
-    <h2>Available Events</h2>
-    <p>Verified opportunities directly from our partners.</p>
+    <h2>Explore Global Opportunities</h2>
+    <p>Turn opportunities into real journeys 🌍</p>
 
-    <div id="programs"></div>
+    <div id="programs" class="cards"></div>
   </section>
 
   <!-- JavaScript to fetch and display program(s) -->
   <script>
   const BASE_URL = "https://platform-5yxz.onrender.com";
   const API_URL = `${BASE_URL}/api/programs`;
+
+  function getTag(type) {
+    if (!type) return "internship";
+    return type.toLowerCase();
+  }
 
   async function loadPrograms() {
     const container = document.getElementById("programs");
@@ -62,15 +67,29 @@
       filtered.forEach(p => {
         const card = document.createElement("div");
         card.className = "program-card";
+
         card.innerHTML = `
-          <h3>${p.name}</h3>
-          <p><strong>Provider:</strong> ${p.provider}</p>
-          <p><strong>Level:</strong> ${p.level}</p>
-          <p><strong>Field:</strong> ${p.field}</p>
-          <p><strong>Country:</strong> ${p.country}</p>
-          <p><strong>Verified:</strong> ${p.verified ? "✅ Yes" : "❌ No"}</p>
-          <a href="${p.website}" target="_blank">Official website</a>
+          <span class="tag ${getTag(p.type)}">${(p.type || "INTERNSHIP").toUpperCase()}</span>
+
+          <h3>${p.name || p.title || "Untitled Program"}</h3>
+
+          <p class="description">
+            ${p.description ? p.description.substring(0, 120) + "..." : "No description available"}
+          </p>
+
+          <p>📍 ${p.country || "Global"}</p>
+          <p>🏢 ${p.provider || "Unknown provider"}</p>
+          <p>⏳ ${p.deadline ? new Date(p.deadline).toLocaleDateString() : "No deadline"}</p>
+
+          <div class="card-actions">
+            <a href="${p.website || p.source?.sourceUrl || "#"}" target="_blank">
+              View Details
+            </a>
+
+            <a href="#" class="cta-btn">✈️ Plan My Trip</a>
+          </div>
         `;
+
         container.appendChild(card);
       });
 
@@ -86,5 +105,3 @@
 
 </body>
 </html>
-
-
