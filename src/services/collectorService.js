@@ -1,6 +1,8 @@
 // src/services/collectorService.js
 
 const { collectReliefWeb } = require("./collectors/reliefWebService");
+const { collectDevPost} = require("./collectors/devpostWebService");
+const { collectEuOpenData} = require("./collectors/euopendataWebService");
 
 /**
  * Central collector runner
@@ -10,7 +12,15 @@ const collectors = [
   {
     name: "ReliefWeb API",
     run: collectReliefWeb
-  }
+  },
+  { 
+    name: "DevPost API",
+    run: collectDevPost
+  },
+  { 
+    name: "EuOpenData API",
+    run: collectEuOpenData
+  },
 ];
 
 const runCollector = async () => {
