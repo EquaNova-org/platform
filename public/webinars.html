@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EquaNova - Webinars & Summits</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; }
+
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 48px; border-bottom: 1px solid #1e1e2e; background: #0d0d18; position: sticky; top: 0; z-index: 100; }
+    .logo { font-size: 22px; font-weight: 700; background: linear-gradient(135deg, #7c6af7, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-links { list-style: none; display: flex; gap: 32px; }
+    .nav-links a { color: #9898b0; text-decoration: none; font-size: 14px; transition: color 0.2s; }
+    .nav-links a:hover { color: #e8e8f0; }
+    .auth-buttons { display: flex; gap: 12px; }
+    .btn { padding: 9px 20px; border-radius: 8px; font-size: 14px; text-decoration: none; font-weight: 500; transition: all 0.2s; }
+    .primary-btn { background: #7c6af7; color: #fff; }
+    .primary-btn:hover { background: #6a58e0; }
+    .secondary-btn { border: 1px solid #2e2e45; color: #9898b0; }
+    .secondary-btn:hover { border-color: #7c6af7; color: #e8e8f0; }
+
+    .page-header { padding: 56px 48px 32px; max-width: 1200px; margin: 0 auto; }
+    .breadcrumb { font-size: 13px; color: #6b6b8a; margin-bottom: 20px; }
+    .breadcrumb a { color: #7c6af7; text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .page-header h1 { font-size: 36px; font-weight: 700; color: #ffffff; margin-bottom: 10px; }
+    .page-header h1 span { background: linear-gradient(135deg, #a78bfa, #c4b5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .page-header p { color: #6b6b8a; font-size: 16px; }
+
+    .filters { display: flex; gap: 10px; flex-wrap: wrap; padding: 0 48px 32px; max-width: 1200px; margin: 0 auto; }
+    .filter-btn { padding: 8px 18px; border-radius: 20px; border: 1px solid #1e1e2e; background: transparent; color: #9898b0; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+    .filter-btn:hover, .filter-btn.active { border-color: #a78bfa; color: #a78bfa; background: rgba(167, 139, 250, 0.08); }
+
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding: 0 48px 80px; max-width: 1200px; margin: 0 auto; }
+
+    .opportunity-card { background: #0d0d18; border: 1px solid #1e1e2e; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 12px; transition: all 0.3s; }
+    .opportunity-card:hover { border-color: #a78bfa; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(167, 139, 250, 0.1); }
+
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .tag { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; }
+    .tag-webinar { background: rgba(167, 139, 250, 0.12); color: #a78bfa; }
+    .tag-summit { background: rgba(196, 181, 253, 0.12); color: #c4b5fd; }
+    .verified-badge { font-size: 11px; color: #34d399; display: flex; align-items: center; gap: 4px; }
+    .card-title { font-size: 16px; font-weight: 600; color: #ffffff; line-height: 1.4; }
+    .card-provider { font-size: 13px; color: #6b6b8a; }
+    .card-description { font-size: 13px; color: #9898b0; line-height: 1.6; flex: 1; }
+    .card-meta { display: flex; flex-direction: column; gap: 6px; padding-top: 8px; border-top: 1px solid #1e1e2e; }
+    .meta-item { font-size: 12px; color: #6b6b8a; display: flex; align-items: center; gap: 6px; }
+    .card-actions { display: flex; gap: 10px; margin-top: 4px; }
+    .action-btn { flex: 1; padding: 10px; border-radius: 10px; font-size: 13px; font-weight: 600; text-decoration: none; text-align: center; transition: all 0.2s; border: none; cursor: pointer; }
+    .btn-primary { background: #a78bfa; color: #0a0a0f; }
+    .btn-primary:hover { background: #7c6af7; }
+    .btn-secondary { background: #1a1a2e; color: #9898b0; border: 1px solid #2e2e45; }
+    .btn-secondary:hover { border-color: #a78bfa; color: #a78bfa; }
+
+    .loading, .empty-state { text-align: center; padding: 80px 24px; color: #6b6b8a; grid-column: 1 / -1; }
+    .loading-spinner { width: 36px; height: 36px; border: 3px solid #1e1e2e; border-top-color: #a78bfa; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .count-badge { display: inline-block; background: rgba(167, 139, 250, 0.12); color: #a78bfa; font-size: 13px; padding: 4px 12px; border-radius: 20px; margin-top: 8px; }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      .page-header, .filters, .cards-grid { padding-left: 20px; padding-right: 20px; }
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">EquaNova</div>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="events.html">Events</a></li>
+    </ul>
+    <div class="auth-buttons">
+      <a href="login.html" class="btn primary-btn">Log In</a>
+      <a href="signup.html" class="btn secondary-btn">Sign Up</a>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="breadcrumb"><a href="events.html">← Back to Categories</a></div>
+    <h1>🖥️ <span>Webinars & Summits</span></h1>
+    <p>Global online events, educational summits and learning sessions from industry leaders.</p>
+    <span class="count-badge" id="count-badge">Loading...</span>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="webinar">Webinars</button>
+  </div>
+
+  <div class="cards-grid" id="cards">
+    <div class="loading">
+      <div class="loading-spinner"></div>
+      <p>Loading webinars...</p>
+    </div>
+  </div>
+
+  <script>
+    const BASE_URL = "https://platform-5yxz.onrender.com";
+    const TYPES = ["webinar"];
+    let allPrograms = [];
+
+    function renderCards(programs) {
+      const container = document.getElementById("cards");
+      if (programs.length === 0) {
+        container.innerHTML = `<div class="empty-state"><p style="font-size:40px">🖥️</p><p style="margin-top:12px">No webinars found yet. Check back soon!</p></div>`;
+        return;
+      }
+      container.innerHTML = programs.map(p => `
+        <div class="opportunity-card">
+          <div class="card-top">
+            <span class="tag tag-webinar">${(p.type || "Webinar").toUpperCase()}</span>
+            ${p.verified ? '<span class="verified-badge">✔ Verified</span>' : ''}
+          </div>
+          <div class="card-title">${p.title || "Untitled"}</div>
+          <div class="card-provider">🏢 ${p.provider || "Unknown provider"}</div>
+          <div class="card-description">${p.description ? p.description.substring(0, 130) + "..." : "No description available."}</div>
+          <div class="card-meta">
+            <div class="meta-item">🌐 Online</div>
+            <div class="meta-item">⏳ ${p.deadline ? new Date(p.deadline).toLocaleDateString() : "No date listed"}</div>
+            <div class="meta-item">📡 ${p.source?.name || "Unknown source"}</div>
+          </div>
+          <div class="card-actions">
+            <a href="${p.source?.sourceUrl || "#"}" target="_blank" class="action-btn btn-primary">Join Event</a>
+            <a href="#" class="action-btn btn-secondary">Save for Later</a>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function loadPrograms() {
+      try {
+        const res = await fetch(`${BASE_URL}/api/programs`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const all = await res.json();
+        allPrograms = all.filter(p => TYPES.includes((p.type || "").toLowerCase()));
+        document.getElementById("count-badge").textContent = `${allPrograms.length} webinars found`;
+        renderCards(allPrograms);
+      } catch (err) {
+        document.getElementById("cards").innerHTML = `<div class="empty-state" style="color:#f87171">Failed to load. Please try again.</div>`;
+        console.error(err);
+      }
+    }
+
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const filter = btn.dataset.filter;
+        const filtered = filter === "all" ? allPrograms : allPrograms.filter(p => (p.type || "").toLowerCase() === filter);
+        document.getElementById("count-badge").textContent = `${filtered.length} webinars found`;
+        renderCards(filtered);
+      });
+    });
+
+    loadPrograms();
+  </script>
+
+</body>
+</html>
