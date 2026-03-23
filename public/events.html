@@ -3,105 +3,223 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EquaNova - Events</title>
-  <link rel="stylesheet" href="style.css">
+  <title>EquaNova - Explore Opportunities</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0a0a0f;
+      color: #e8e8f0;
+      min-height: 100vh;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 48px;
+      border-bottom: 1px solid #1e1e2e;
+      background: #0d0d18;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #7c6af7, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-links { list-style: none; display: flex; gap: 32px; }
+    .nav-links a { color: #9898b0; text-decoration: none; font-size: 14px; transition: color 0.2s; }
+    .nav-links a:hover { color: #e8e8f0; }
+
+    .auth-buttons { display: flex; gap: 12px; }
+    .btn { padding: 9px 20px; border-radius: 8px; font-size: 14px; text-decoration: none; font-weight: 500; transition: all 0.2s; }
+    .primary-btn { background: #7c6af7; color: #fff; }
+    .primary-btn:hover { background: #6a58e0; }
+    .secondary-btn { border: 1px solid #2e2e45; color: #9898b0; }
+    .secondary-btn:hover { border-color: #7c6af7; color: #e8e8f0; }
+
+    .hero {
+      text-align: center;
+      padding: 80px 24px 48px;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffffff, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #6b6b8a;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 24px 80px;
+    }
+
+    .category-card {
+      background: #0d0d18;
+      border: 1px solid #1e1e2e;
+      border-radius: 20px;
+      padding: 40px 36px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .category-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .category-card:hover {
+      transform: translateY(-4px);
+      border-color: #7c6af7;
+      box-shadow: 0 20px 60px rgba(124, 106, 247, 0.15);
+    }
+
+    .category-card:hover::before { opacity: 1; }
+
+    .card-icon { font-size: 40px; }
+
+    .card-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .card-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      color: #6b6b8a;
+      line-height: 1.6;
+    }
+
+    .card-arrow {
+      margin-top: auto;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: gap 0.2s;
+    }
+
+    .category-card:hover .card-arrow { gap: 10px; }
+
+    /* Individual card accent colors */
+    .card-study .card-label { color: #60a5fa; }
+    .card-study .card-arrow { color: #60a5fa; }
+    .card-study:hover { border-color: #60a5fa; box-shadow: 0 20px 60px rgba(96, 165, 250, 0.12); }
+
+    .card-competition .card-label { color: #f59e0b; }
+    .card-competition .card-arrow { color: #f59e0b; }
+    .card-competition:hover { border-color: #f59e0b; box-shadow: 0 20px 60px rgba(245, 158, 11, 0.12); }
+
+    .card-internship .card-label { color: #34d399; }
+    .card-internship .card-arrow { color: #34d399; }
+    .card-internship:hover { border-color: #34d399; box-shadow: 0 20px 60px rgba(52, 211, 153, 0.12); }
+
+    .card-webinar .card-label { color: #a78bfa; }
+    .card-webinar .card-arrow { color: #a78bfa; }
+    .card-webinar:hover { border-color: #a78bfa; box-shadow: 0 20px 60px rgba(167, 139, 250, 0.12); }
+
+    @media (max-width: 640px) {
+      .categories { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 28px; }
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Navigation -->
   <nav>
     <div class="logo">EquaNova</div>
-
     <ul class="nav-links">
       <li><a href="/">Home</a></li>
-      <li><a href="/events">Events</a></li>
+      <li><a href="/events.html">Events</a></li>
     </ul>
-
     <div class="auth-buttons">
       <a href="login.html" class="btn primary-btn">Log In</a>
       <a href="signup.html" class="btn secondary-btn">Sign Up</a>
     </div>
   </nav>
 
-  <!-- Events Section -->
-  <section class="events-section">
-    <h2>Explore Global Opportunities</h2>
-    <p>Turn opportunities into real journeys 🌍</p>
+  <div class="hero">
+    <h1>Explore Global Opportunities</h1>
+    <p>Choose a category and discover verified programs built exclusively for students under 25.</p>
+  </div>
 
-    <div id="programs" class="cards"></div>
-  </section>
+  <div class="categories">
 
-  <!-- JavaScript to fetch and display program(s) -->
-  <script>
-  const BASE_URL = "https://platform-5yxz.onrender.com";
-  const API_URL = `${BASE_URL}/api/programs`;
+    <a href="study-programs.html" class="category-card card-study">
+      <div class="card-icon">🎓</div>
+      <div class="card-label">Category 01</div>
+      <div class="card-title">Study Programs</div>
+      <div class="card-desc">University exchanges, summer camps, research programs, and scholarships — all in-campus, study-abroad experiences.</div>
+      <div class="card-arrow">Explore programs →</div>
+    </a>
 
-  function getTag(type) {
-    if (!type) return "internship";
-    return type.toLowerCase();
-  }
+    <a href="competitions.html" class="category-card card-competition">
+      <div class="card-icon">🏆</div>
+      <div class="card-label">Category 02</div>
+      <div class="card-title">Competitions</div>
+      <div class="card-desc">Hackathons, contests, and global competitions where students can win prizes and recognition.</div>
+      <div class="card-arrow">View competitions →</div>
+    </a>
 
-  async function loadPrograms() {
-    const container = document.getElementById("programs");
+    <a href="internships.html" class="category-card card-internship">
+      <div class="card-icon">💼</div>
+      <div class="card-label">Category 03</div>
+      <div class="card-title">Internships & Volunteering</div>
+      <div class="card-desc">Gain real-world experience through verified international internships and meaningful volunteering opportunities.</div>
+      <div class="card-arrow">Find opportunities →</div>
+    </a>
 
-    try {
-      const response = await fetch(API_URL);
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
+    <a href="webinars.html" class="category-card card-webinar">
+      <div class="card-icon">🖥️</div>
+      <div class="card-label">Category 04</div>
+      <div class="card-title">Webinars & Summits</div>
+      <div class="card-desc">Join global online events, educational summits, and learning sessions from industry leaders.</div>
+      <div class="card-arrow">Browse webinars →</div>
+    </a>
 
-      const programs = await response.json();
-
-      const params = new URLSearchParams(window.location.search);
-      const type = params.get("type");
-
-      const filtered = type
-        ? programs.filter(p => p.type === type)
-        : programs;
-
-      if (filtered.length === 0) {
-        container.innerHTML = "<p>No programs found.</p>";
-        return;
-      }
-
-      filtered.forEach(p => {
-        const card = document.createElement("div");
-        card.className = "program-card";
-
-        card.innerHTML = `
-          <span class="tag ${getTag(p.type)}">${(p.type || "INTERNSHIP").toUpperCase()}</span>
-
-          <h3>${p.name || p.title || "Untitled Program"}</h3>
-
-          <p class="description">
-            ${p.description ? p.description.substring(0, 120) + "..." : "No description available"}
-          </p>
-
-          <p>📍 ${p.country || "Global"}</p>
-          <p>🏢 ${p.provider || "Unknown provider"}</p>
-          <p>⏳ ${p.deadline ? new Date(p.deadline).toLocaleDateString() : "No deadline"}</p>
-
-          <div class="card-actions">
-            <a href="${p.website || p.source?.sourceUrl || "#"}" target="_blank">
-              View Details
-            </a>
-
-            <a href="#" class="cta-btn">✈️ Plan My Trip</a>
-          </div>
-        `;
-
-        container.appendChild(card);
-      });
-
-    } catch (err) {
-      console.error(err);
-      container.innerHTML =
-        `<p style="color:red">Failed to load programs</p>`;
-    }
-  }
-
-  loadPrograms();
-</script>
+  </div>
 
 </body>
 </html>
