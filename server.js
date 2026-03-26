@@ -7,9 +7,9 @@ const connectDB = require("./src/config/db");
 const { runCollector } = require("./src/services/collectorService");
 const { startScheduler, stopScheduler } = require("./src/services/scheduler");
 
+const authRoutes = require("./src/routes/authRoutes");
 const programRoutes = require("./src/routes/programRoutes");
 const bookingRoutes = require("./src/routes/bookingRoutes");
-const authRoutes = require("./src/routes/authRoutes");
 
 const app = express();
 
@@ -61,15 +61,11 @@ app.get("/health", (req, res) => {
 app.use("/api/programs", programRoutes);
 app.use("/api", bookingRoutes);
 app.use("/api/auth", authRoutes);
-/* =====================
-   START SERVER
-===================== */
-const PORT = process.env.PORT || 5000;
 
+// Static files BEFORE listen
+app.use(express.static(path.join(__dirname, "public")));
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  /* =====================
-   STATIC FILES
-===================== */
-app.use(express.static(path.join(__dirname, "public")));
 });
