@@ -9,6 +9,7 @@ const { startScheduler, stopScheduler } = require("./src/services/scheduler");
 
 const programRoutes = require("./src/routes/programRoutes");
 const bookingRoutes = require("./src/routes/bookingRoutes");
+const authRoutes = require("./src/routes/authRoutes");
 
 const app = express();
 
@@ -59,6 +60,7 @@ app.get("/health", (req, res) => {
 ===================== */
 app.use("/api/programs", programRoutes);
 app.use("/api", bookingRoutes);
+app.use("/api/auth", authRoutes);
 /* =====================
    START SERVER
 ===================== */
