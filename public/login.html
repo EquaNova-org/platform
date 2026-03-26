@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log In | EquaNova</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0a0a0f;
+      color: #e8e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 48px;
+      border-bottom: 1px solid #1e1e2e;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #7c6af7, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links { list-style: none; display: flex; gap: 24px; }
+    .nav-links a { color: #9898b0; text-decoration: none; font-size: 14px; transition: color 0.2s; }
+    .nav-links a:hover { color: #e8e8f0; }
+
+    .auth-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-wrapper::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 500px;
+      background: radial-gradient(ellipse, rgba(124, 106, 247, 0.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .auth-card {
+      background: #0d0d18;
+      border: 1px solid #1e1e2e;
+      border-radius: 24px;
+      padding: 48px 44px;
+      width: 100%;
+      max-width: 440px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #7c6af7, #a78bfa, #c4b5fd);
+    }
+
+    .auth-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #a78bfa;
+      margin-bottom: 12px;
+    }
+
+    .auth-card h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .auth-card .subtitle {
+      font-size: 14px;
+      color: #6b6b8a;
+      margin-bottom: 36px;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .input-wrap { position: relative; }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      pointer-events: none;
+    }
+
+    .form-input {
+      width: 100%;
+      background: #0a0a0f;
+      border: 1px solid #2e2e45;
+      border-radius: 10px;
+      padding: 13px 14px 13px 42px;
+      color: #e8e8f0;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-input::placeholder { color: #4a4a6a; }
+    .form-input:focus {
+      border-color: #7c6af7;
+      box-shadow: 0 0 0 3px rgba(124, 106, 247, 0.1);
+    }
+
+    .forgot-link {
+      text-align: right;
+      font-size: 12px;
+      margin-top: -6px;
+    }
+
+    .forgot-link a { color: #6b6b8a; text-decoration: none; transition: color 0.2s; }
+    .forgot-link a:hover { color: #a78bfa; }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #7c6af7, #a78bfa);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 8px 24px rgba(124, 106, 247, 0.25);
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(124, 106, 247, 0.4);
+    }
+
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .btn-spinner {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .alert {
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .alert-error { background: rgba(248, 113, 113, 0.1); border: 1px solid rgba(248, 113, 113, 0.25); color: #f87171; }
+    .alert-success { background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.25); color: #34d399; }
+
+    .auth-switch {
+      text-align: center;
+      font-size: 13px;
+      color: #6b6b8a;
+      margin-top: 24px;
+    }
+
+    .auth-switch a { color: #a78bfa; text-decoration: none; font-weight: 500; }
+    .auth-switch a:hover { text-decoration: underline; }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+      color: #2e2e45;
+      font-size: 12px;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #1e1e2e;
+    }
+
+    @media (max-width: 480px) {
+      nav { padding: 16px 20px; }
+      .auth-card { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">EquaNova</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="signup.html">Sign Up</a></li>
+    </ul>
+  </nav>
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-eyebrow">✦ Welcome back</div>
+      <h2>Log In to EquaNova</h2>
+      <p class="subtitle">Continue your journey — your opportunities are waiting.</p>
+
+      <div class="alert alert-error" id="error-msg"></div>
+      <div class="alert alert-success" id="success-msg"></div>
+
+      <div class="form-group">
+        <div class="input-wrap">
+          <span class="input-icon">✉️</span>
+          <input type="email" id="email" class="form-input" placeholder="Email address" required />
+        </div>
+        <div class="input-wrap">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="password" class="form-input" placeholder="Password" required />
+        </div>
+        <div class="forgot-link"><a href="#">Forgot password?</a></div>
+      </div>
+
+      <button class="submit-btn" id="submit-btn" onclick="handleLogin()">
+        <span id="btn-text">Log In</span>
+        <div class="btn-spinner" id="btn-spinner"></div>
+      </button>
+
+      <div class="divider">or</div>
+
+      <p class="auth-switch">Don't have an account? <a href="signup.html">Sign up free</a></p>
+    </div>
+  </div>
+
+  <script>
+    const BASE_URL = "https://platform-5yxz.onrender.com";
+
+    function showError(msg) {
+      const el = document.getElementById("error-msg");
+      el.textContent = msg;
+      el.style.display = "block";
+      document.getElementById("success-msg").style.display = "none";
+    }
+
+    function showSuccess(msg) {
+      const el = document.getElementById("success-msg");
+      el.textContent = msg;
+      el.style.display = "block";
+      document.getElementById("error-msg").style.display = "none";
+    }
+
+    function setLoading(loading) {
+      const btn = document.getElementById("submit-btn");
+      const text = document.getElementById("btn-text");
+      const spinner = document.getElementById("btn-spinner");
+      btn.disabled = loading;
+      text.style.display = loading ? "none" : "block";
+      spinner.style.display = loading ? "block" : "none";
+    }
+
+    async function handleLogin() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (!email || !password) {
+        showError("Please fill in all fields.");
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const res = await fetch(`${BASE_URL}/api/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          showError(data.message || "Invalid email or password.");
+          return;
+        }
+
+        // Save token and user info
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        showSuccess("Logged in! Redirecting...");
+
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1200);
+
+      } catch (err) {
+        showError("Could not connect to server. Please try again.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // Allow Enter key to submit
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") handleLogin();
+    });
+
+    // Redirect if already logged in
+    if (localStorage.getItem("token")) {
+      window.location.href = "index.html";
+    }
+  </script>
+
+</body>
+</html>
